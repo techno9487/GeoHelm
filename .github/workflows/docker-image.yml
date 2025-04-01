@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build --pull --rm -f Dockerfile -t ghcr.io/charliek17/mapclick:0.1.0 . --platform linux/amd64
+
+    - name: Push the Docker image
+      run: docker push ghcr.io/charliek17/mapclick:0.1.0
