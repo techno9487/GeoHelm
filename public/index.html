@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Map Click App</title>
+  <link rel="stylesheet" href="leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <style>
+    body, html {
+      height: 100%;
+      background-image: url('images/hero.png');
+    }
+    .centered-form {
+      padding-top: 5em;
+      height: 75vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
+    #mapContainer {
+      display: none;
+    }
+    
+    .credits {
+      font-size: 0.9rem;
+      color: #d67fc5;
+    }
+  </style>
+</head>
+<body>
+<div id="loginContainer" class="container centered-form">
+  <div class="col-md-4">
+    <h3 class="text-center mb-4">Login to Map Click App</h3>
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" placeholder="elasticuser" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="elasticuser" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+  </div>
+  </div class="row">
+    <div class="credits text-center col-md-12 mb-4">
+      <p>Note: <strong>This app is not endorced or supported by elastic - it is best efforts by:</strong></p>
+      <p>Author: <strong>Charlie Kelly @ Elastic</strong></p>
+      <p>GitHub: <a href="https://github.com/charliek17/clickapp" target="_blank">github.com/charliek17/clickapp</a></p>
+    </div>
+  </div>
+</div>
+
+<div id="mapContainer">
+  <div id="mapid" style="height: 90vh;"></div>
+  <div class="modal fade" id="locationModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="locationForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Location Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3"><label class="form-label">Coordinates</label><input type="text" class="form-control" id="coords" readonly></div>
+            <div class="mb-3"><label class="form-label">Note</label><input type="text" class="form-control" id="note" required></div>
+            <div class="mb-3"><label class="form-label">Type</label><input type="text" class="form-control" id="type" required></div>
+            <div class="mb-3"><label class="form-label">Number</label><input type="number" class="form-control" id="number" required></div>
+            <div class="mb-3"><label class="form-label">Fruit</label><input type="text" class="form-control" id="fruit"></div>
+            <div class="mb-3"><label class="form-label">Shipment</label><input type="text" class="form-control" id="shipment"></div>
+            <input type="hidden" id="lat"><input type="hidden" id="lng">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="leaflet/leaflet.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script>
+
+  let creds = null;
+
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    creds = {
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value
+    };
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('mapContainer').style.display = 'block';
+    initializeMap();
+  });
+
+  function initializeMap() {
+    const map = L.map('mapid').setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=FqfkevxPp1MHOgb0ECgS', {
+      attribution: '&copy; Local Tiles & OpenStreetMap contributors'
+    }).addTo(map);
+
+    const modal = new bootstrap.Modal(document.getElementById('locationModal'));
+
+    map.on('click', function (e) {
+      const lat = e.latlng.lat.toFixed(6);
+      const lng = e.latlng.lng.toFixed(6);
+      document.getElementById('lat').value = lat;
+      document.getElementById('lng').value = lng;
+      document.getElementById('coords').value = `${lat}, ${lng}`;
+      modal.show();
+    });
+
+    document.getElementById('locationForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const payload = {
+        location: {
+          lat: parseFloat(document.getElementById('lat').value),
+          lon: parseFloat(document.getElementById('lng').value)
+        },
+        note: document.getElementById('note').value,
+        type: document.getElementById('type').value.toUpperCase(),
+        number: parseInt(document.getElementById('number').value),
+        fruit: document.getElementById('fruit').value,
+        shipment: document.getElementById('shipment').value,
+        timestamp: new Date().toISOString()
+      };
+
+      if (isNaN(payload.number)) {
+        alert('Number must be a valid integer.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/location', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa(`${creds.username}:${creds.password}`)
+          },
+          body: JSON.stringify(payload)
+        });
+        alert(res.ok ? 'Indexed successfully' : 'Failed to index');
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+
+      modal.hide();
+      document.getElementById('locationForm').reset();
+    });
+  }
+</script>
+</body>
+</html>
