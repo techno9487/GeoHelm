@@ -128,7 +128,9 @@
         number: parseInt(document.getElementById('number').value),
         fruit: document.getElementById('fruit').value,
         shipment: document.getElementById('shipment').value,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
       };
 
       if (isNaN(payload.number)) {
