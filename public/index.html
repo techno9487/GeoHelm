@@ -24,7 +24,7 @@
     
     .credits {
       font-size: 0.9rem;
-      color: #d67fc5;
+      color: #3d373c;
     }
   </style>
 </head>
@@ -46,9 +46,9 @@
   </div>
   </div class="row">
     <div class="credits text-center col-md-12 mb-4">
-      <p>Note: <strong>This app is not endorced or supported by elastic - it is best efforts by:</strong></p>
+      <p>Note: <strong>This app is not endorced or supported by Elastic - it is best efforts by:</strong></p>
       <p>Author: <strong>Charlie Kelly @ Elastic</strong></p>
-      <p>GitHub: <a href="https://github.com/charliek17/clickapp" target="_blank">github.com/charliek17/clickapp</a></p>
+      <p>GitHub: <a href="https://github.com/charliek17/mapclick" target="_blank">https://github.com/charliek17/mapclick</a></p>
     </div>
   </div>
 </div>
@@ -66,7 +66,7 @@
           <div class="modal-body">
             <div class="mb-3"><label class="form-label">Coordinates</label><input type="text" class="form-control" id="coords" readonly></div>
             <div class="mb-3"><label class="form-label">Note</label><input type="text" class="form-control" id="note" required></div>
-            <div class="mb-3"><label class="form-label">Type</label><input type="text" class="form-control" id="type" required></div>
+            <div class="mb-3"><label class="form-label">Type</label><input type="text" class="form-control" id="type" pattern="[A-Z]*" required></div>
             <div class="mb-3"><label class="form-label">Number</label><input type="number" class="form-control" id="number" required></div>
             <div class="mb-3"><label class="form-label">Fruit</label><input type="text" class="form-control" id="fruit"></div>
             <div class="mb-3"><label class="form-label">Shipment</label><input type="text" class="form-control" id="shipment"></div>
