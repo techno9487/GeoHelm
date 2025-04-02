@@ -2,16 +2,21 @@ const express = require('express');
 const { Client } = require('@elastic/elasticsearch');
 const bodyParser = require('body-parser');
 const path = require('path');
+const config = require('./config.json');
 
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
+console.log(config);
 
 
 app.post('/api/location', async (req, res) => {
   const client = new Client({
-    node: 'http://localhost:9200',
+    node: config.elasticsearch_config.elasticsearch_url,
+    caFingerprint: config.elasticsearch_config.caFingerprint,
+    tls: {
+      rejectUnauthorized: false
+    },
     auth: {
       username: req.body.username,
       password: req.body.password
