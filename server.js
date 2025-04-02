@@ -15,7 +15,7 @@ app.post('/api/location', async (req, res) => {
     node: config.elasticsearch_config.elasticsearch_url,
     caFingerprint: config.elasticsearch_config.caFingerprint,
     tls: {
-      rejectUnauthorized: false
+      rejectUnauthorized: true
     },
     auth: {
       username: req.body.username,
