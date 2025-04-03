@@ -2,5 +2,6 @@
     "elasticsearch_config": {
         "elasticsearch_url": "http://localhost:9200",
         "caFingerprint": null
-    }
+    },
+    "comment": "test"
 }

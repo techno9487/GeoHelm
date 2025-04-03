@@ -9,6 +9,11 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 console.log(config);
 
+app.get('/api/f-names', (req, res) => {
+  res.json({
+    config
+  });
+});
 
 app.post('/api/location', async (req, res) => {
   const client = new Client({
@@ -23,6 +28,7 @@ app.post('/api/location', async (req, res) => {
     }
   });
   try {
+    delete req.body.password;
     const response = await client.index({
       index: 'locations',
       document: req.body
