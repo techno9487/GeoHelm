@@ -8,6 +8,7 @@
   <style>
     body, html {
       height: 100%;
+      background-size: cover;
       background-image: url('images/hero.png');
     }
     .centered-form {
@@ -51,7 +52,7 @@
         <label for="password" class="form-label">Password</label>
         <input type="password" class="form-control" id="password" placeholder="elasticuser" required>
       </div>
-      <button type="submit" class="btn btn-primary w-100">Login</button>
+      <button type="submit" class="btn btn-primary w-100 rounded-pill">Login</button>
     </form>
   </div>
 </div>
@@ -69,7 +70,7 @@
           </div>
           <div class="modal-body">
             <div class="mb-3"><label class="form-label">Coordinates</label><input type="text" class="form-control" id="coords" readonly></div>
-            <div class="mb-3"><label id="lnote" class="form-label">Note</label><input type="text" class="form-control" id="note" required></div>
+            <div class="mb-3"><label id="lnote" class="form-label">Note</label><textarea type="text" class="form-control" id="note" required></textarea></div>
             <div class="mb-3"><label id="onote" class="form-label">Type</label><input type="text" class="form-control" id="type" pattern="[A-Z]*" required></div>
             <div class="mb-3"><label id="cnote" class="form-label">Number</label><input type="number" class="form-control" id="number" required></div>
             <div class="mb-3"><label id="tnote" class="form-label">Fruit</label><select class="form-control" name="type" id="location_type">
@@ -177,8 +178,8 @@
       const select = document.getElementById('location_type');
       select.innerHTML = ''; 
 
-      if (Array.isArray(config.location_type)) {
-        config.location_type.forEach(content => {
+      if (Array.isArray(config.location_type_dropdown)) {
+        config.location_type_dropdown.forEach(content => {
           const option = document.createElement('option');
           option.value = content;
           option.textContent = content;
