@@ -135,7 +135,11 @@
   function initializeMap() {
     const map = L.map('mapid').setView([51.505, -0.09], 13);
     L.tileLayer(config.leaflet_map_url, {
-      attribution: '&copy; Local Tiles & OpenStreetMap contributors'
+      attribution: '&copy; Local Tiles & OpenStreetMap contributors',
+      tileSize: 512,
+      zoomOffset: -1,
+      inertia: true,
+      zoomAnimation: true        
     }).addTo(map);
 
     const modal = new bootstrap.Modal(document.getElementById('locationModal'));
