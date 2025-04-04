@@ -1,3 +1,4 @@
+const config = require('./config.json');
 const apm = require('elastic-apm-node').start({
   serviceName: 'GeoHelm',
   // Use if APM Server requires a token
@@ -9,7 +10,7 @@ const express = require('express');
 const { Client } = require('@elastic/elasticsearch');
 const bodyParser = require('body-parser');
 const path = require('path');
-const config = require('./config.json');
+
 
 const app = express();
 app.use(bodyParser.json());
