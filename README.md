@@ -55,6 +55,13 @@ map-click-app/
 │   └── ...other files
 ```
 
+
+## Docker
+
+'''bash 
+docker run -p 3000:3000 -v ./config.json:/usr/share/map-click/config.json geohelm:VERSION
+'''
+
 ## Contributing
 
 Contributions are welcome!
