@@ -2,6 +2,7 @@
 
 A web application that allows users to click on a map, submit data, and index it to Elasticsearch.
 
+![GeoHelm](https://github.com/charliek17/geohelm/blob/main/images/geohelm.png.jpg?raw=true)
 ## Features
 
 - Interactive map for user input.
