@@ -6,5 +6,6 @@
     "comment": "Comment",
     "type": "Type",
     "number": "Number",
-    "location_type": ["Office", "Shop", "House", "Building"]
+    "location_type": "Location Type",
+    "location_type_dropdown": ["Office", "Shop", "House", "Building"]
 }
