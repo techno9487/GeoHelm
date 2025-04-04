@@ -3,5 +3,8 @@
         "elasticsearch_url": "http://localhost:9200",
         "caFingerprint": null
     },
-    "comment": "test"
+    "comment": "Comment",
+    "type": "Type",
+    "number": "Number",
+    "location_type": ["Office", "Shop", "House", "Building"]
 }

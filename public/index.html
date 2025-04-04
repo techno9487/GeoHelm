@@ -11,8 +11,8 @@
       background-image: url('images/hero.png');
     }
     .centered-form {
-      padding-top: 5em;
-      height: 75vh;
+      padding-top: 10em;
+      height: 65vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -23,15 +23,25 @@
     }
     
     .credits {
+  
       font-size: 0.9rem;
       color: #3d373c;
     }
+    .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: transparent
+    text-align: center;
+}
   </style>
 </head>
 <body>
 <div id="loginContainer" class="container centered-form">
   <div class="col-md-4">
-    <h3 class="text-center mb-4">Login to GeoHelm</h3>
+ 
+    <h3 class="text-center">   <img src="images/geohelm.png" alt="Logo" class="img-fluid mb-2"></h3>
     <form id="loginForm">
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
@@ -44,14 +54,8 @@
       <button type="submit" class="btn btn-primary w-100">Login</button>
     </form>
   </div>
-  </div class="row">
-    <div class="credits text-center col-md-12 mb-4">
-      <p>Note: <strong>This app is not endorced or supported by Elastic - it is best efforts by:</strong></p>
-      <p>Author: <strong>Charlie Kelly @ Elastic</strong></p>
-      <p>GitHub: <a href="https://github.com/charliek17/mapclick" target="_blank">https://github.com/charliek17/mapclick</a></p>
-    </div>
-  </div>
 </div>
+
 
 <div id="mapContainer">
   <div id="mapid" style="height: 90vh;"></div>
@@ -65,10 +69,12 @@
           </div>
           <div class="modal-body">
             <div class="mb-3"><label class="form-label">Coordinates</label><input type="text" class="form-control" id="coords" readonly></div>
-            <div class="mb-3"><label id="labelNote" class="form-label">Note</label><input type="text" class="form-control" id="note" required></div>
-            <div class="mb-3"><label class="form-label">Type</label><input type="text" class="form-control" id="type" pattern="[A-Z]*" required></div>
-            <div class="mb-3"><label class="form-label">Number</label><input type="number" class="form-control" id="number" required></div>
-            <div class="mb-3"><label class="form-label">Fruit</label><input type="text" class="form-control" id="fruit"></div>
+            <div class="mb-3"><label id="lnote" class="form-label">Note</label><input type="text" class="form-control" id="note" required></div>
+            <div class="mb-3"><label id="onote" class="form-label">Type</label><input type="text" class="form-control" id="type" pattern="[A-Z]*" required></div>
+            <div class="mb-3"><label id="cnote" class="form-label">Number</label><input type="number" class="form-control" id="number" required></div>
+            <div class="mb-3"><label id="tnote" class="form-label">Fruit</label><select class="form-control" name="type" id="location_type">
+              
+            </select>
             <input type="hidden" id="lat"><input type="hidden" id="lng">
           </div>
           <div class="modal-footer">
@@ -80,7 +86,11 @@
     </div>
   </div>
 </div>
-
+<div class="text-center mb-2 mt-auto footer">
+  <p>Note: <strong>This app is not endorced or supported by Elastic - it is best efforts by:</strong></p>
+  <p>Author: <strong>Charlie Kelly @ Elastic</strong></p>
+  <p>GitHub: <a href="https://github.com/charliek17/mapclick" target="_blank">https://github.com/charliek17/geohelm</a></p>
+</div>
 <script src="leaflet/leaflet.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
 <script>
@@ -125,12 +135,12 @@
         note: document.getElementById('note').value,
         type: document.getElementById('type').value.toUpperCase(),
         number: parseInt(document.getElementById('number').value),
-        fruit: document.getElementById('fruit').value,
+        fruit: document.getElementById('location_type').value,
         timestamp: new Date().toISOString(),
         username: document.getElementById('username').value,
         password: document.getElementById('password').value
       };
-
+  
       try {
         const res = await fetch('/api/location', {
           method: 'POST',
@@ -157,7 +167,26 @@
       const res = await fetch('/api/f-names');
       const config = await res.json();
       console.log('Loaded config:', config);
+
+      if (config) {
+          document.getElementById('lnote').childNodes[0].nodeValue = config.comment + ': ';
+          document.getElementById('onote').childNodes[0].nodeValue = config.type + ': ';
+          document.getElementById('cnote').childNodes[0].nodeValue = config.number + ': ';
+          document.getElementById('tnote').childNodes[0].nodeValue = config.location_type + ': ';
+        }
+      const select = document.getElementById('location_type');
+      select.innerHTML = ''; 
+
+      if (Array.isArray(config.location_type)) {
+        config.location_type.forEach(content => {
+          const option = document.createElement('option');
+          option.value = content;
+          option.textContent = content;
+          select.appendChild(option);
+        });
     }
+  }
+
     document.addEventListener('DOMContentLoaded', function () {
     loadConfig();
   });

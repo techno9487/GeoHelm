@@ -10,9 +10,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 console.log(config);
 
 app.get('/api/f-names', (req, res) => {
-  res.json({
-    config
-  });
+  res.json(config);
 });
 
 app.post('/api/location', async (req, res) => {
@@ -29,9 +27,24 @@ app.post('/api/location', async (req, res) => {
   });
   try {
     delete req.body.password;
+    const transformMap = new Map([
+      ['note', config.comment],
+      ['type', config.type],
+      ['number', config.number],
+      ['fruit', config.location_type]
+    ]);
+    
+    const transformKeys = (reqBody) =>
+      Object.fromEntries(
+        Object.entries(req.body)
+        .map(([k, v]) => [transformMap.get(k) || k, v])
+      );
+      console.log('Transforming keys:', transformKeys(req.body));
+
+    
     const response = await client.index({
       index: 'locations',
-      document: req.body
+      document: transformKeys(req.body),
     });
     res.status(200).json({ result: response.result });
     console.error('Indexing', req.body.username);
