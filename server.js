@@ -1,12 +1,15 @@
 const config = require('./config.json');
 
-const apm = require('elastic-apm-node').start({
-  serviceName: 'GeoHelm',
-  // Use if APM Server requires a token
-  secretToken: config.apm_secretToken,
-  // Set custom APM Server URL (default: http://127.0.0.1:8200)
-  serverUrl: config.apm_serverUrl,
-})
+if(config.apm_enabled)
+{
+  const apm = require('elastic-apm-node').start({
+    serviceName: 'GeoHelm',
+    // Use if APM Server requires a token
+    secretToken: config.apm_secretToken,
+    // Set custom APM Server URL (default: http://127.0.0.1:8200)
+    serverUrl: config.apm_serverUrl,
+  })
+}
 const express = require('express');
 const { Client } = require('@elastic/elasticsearch');
 const bodyParser = require('body-parser');
@@ -17,7 +20,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 console.log(config);
 app.get('/api/f-names', (req, res) => {
-  var span = apm.startSpan('parse json')
+  if(config.apm_enabled) {  var span = apm.startSpan('parse json')}
   res.json(config);
   if (span) span.end()
 });
