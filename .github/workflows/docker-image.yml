@@ -18,4 +18,4 @@ jobs:
       run: docker build --pull --rm -f Dockerfile -t ghcr.io/charliek17/geohelm:0.1.1 . --platform linux/amd64
 
     - name: Push the Docker image
-      run: docker push ghcr.io/charliek17/mapclick:0.1.1
+      run: docker push ghcr.io/charliek17/geohelm:0.1.1
