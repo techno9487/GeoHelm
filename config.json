@@ -3,6 +3,7 @@
         "elasticsearch_url": "http://localhost:9200",
         "caFingerprint": null
     },
+    "leaflet_map_url": "https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=FqfkevxPp1MHOgb0ECgS",
     "comment": "Comment",
     "type": "Type",
     "number": "Number",

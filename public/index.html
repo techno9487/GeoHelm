@@ -95,6 +95,29 @@
 <script src="leaflet/leaflet.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
 <script>
+  let config = null;
+  async function loadConfig() {
+      const res = await fetch('/api/f-names');
+      let config = await res.json();
+      console.log('Loaded config:', config);
+
+      if (config) {
+          document.getElementById('lnote').childNodes[0].nodeValue = config.comment + ': ';
+          document.getElementById('onote').childNodes[0].nodeValue = config.type + ': ';
+          document.getElementById('cnote').childNodes[0].nodeValue = config.number + ': ';
+          document.getElementById('tnote').childNodes[0].nodeValue = config.location_type + ': ';
+        }
+      const select = document.getElementById('location_type');
+      select.innerHTML = ''; 
+
+      if (Array.isArray(config.location_type_dropdown)) {
+        config.location_type_dropdown.forEach(content => {
+          const option = document.createElement('option');
+          option.value = content;
+          option.textContent = content;
+          select.appendChild(option);
+        });
+    }
 
   let creds = null;
 
@@ -108,10 +131,10 @@
     document.getElementById('mapContainer').style.display = 'block';
     initializeMap();
   });
-
+  console.log('Config:', config.leaflet_map_url);
   function initializeMap() {
     const map = L.map('mapid').setView([51.505, -0.09], 13);
-    L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=FqfkevxPp1MHOgb0ECgS', {
+    L.tileLayer(config.leaflet_map_url, {
       attribution: '&copy; Local Tiles & OpenStreetMap contributors'
     }).addTo(map);
 
@@ -160,35 +183,8 @@
       document.getElementById('locationForm').reset();
     });
   }
-</script>
-<script>    
-  // Load the config on page load
-
-  async function loadConfig() {
-      const res = await fetch('/api/f-names');
-      const config = await res.json();
-      console.log('Loaded config:', config);
-
-      if (config) {
-          document.getElementById('lnote').childNodes[0].nodeValue = config.comment + ': ';
-          document.getElementById('onote').childNodes[0].nodeValue = config.type + ': ';
-          document.getElementById('cnote').childNodes[0].nodeValue = config.number + ': ';
-          document.getElementById('tnote').childNodes[0].nodeValue = config.location_type + ': ';
-        }
-      const select = document.getElementById('location_type');
-      select.innerHTML = ''; 
-
-      if (Array.isArray(config.location_type_dropdown)) {
-        config.location_type_dropdown.forEach(content => {
-          const option = document.createElement('option');
-          option.value = content;
-          option.textContent = content;
-          select.appendChild(option);
-        });
-    }
-  }
-
-    document.addEventListener('DOMContentLoaded', function () {
+};
+  document.addEventListener('DOMContentLoaded', function () {
     loadConfig();
   });
 </script>
